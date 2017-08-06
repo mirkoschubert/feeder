@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Feed and Web Scraper",
   "main": "index.js",
+  "bin": {
+    "feeder": "./index.js"
+  },
   "scripts": {
     "test": "test"
   },
@@ -20,5 +23,9 @@
   "bugs": {
     "url": "https://github.com/mirkoschubert/feeder/issues"
   },
-  "homepage": "https://github.com/mirkoschubert/feeder#readme"
+  "homepage": "https://github.com/mirkoschubert/feeder#readme",
+  "dependencies": {
+    "chalk": "^2.0.1",
+    "commander": "^2.11.0"
+  }
 }
