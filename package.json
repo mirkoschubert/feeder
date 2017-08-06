@@ -1,0 +1,24 @@
+{
+  "name": "feeder",
+  "version": "0.0.1",
+  "description": "Feed and Web Scraper",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mirkoschubert/feeder.git"
+  },
+  "keywords": [
+    "feed",
+    "xml",
+    "cli"
+  ],
+  "author": "Mirko Schubert",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mirkoschubert/feeder/issues"
+  },
+  "homepage": "https://github.com/mirkoschubert/feeder#readme"
+}
