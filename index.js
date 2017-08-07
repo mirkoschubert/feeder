@@ -1,7 +1,67 @@
 #!/usr/bin/env node --harmony
+'use strict';
 
+var request = require('request');
+var fse = require('fs-extra');
+var FeedParser = require('feedparser');
+var cheerio = require('cheerio');
 var chalk = require('chalk');
+var moment = require('moment');
 var app = require('commander');
+
+/**
+ * Gets Meta Data from a plain HTML site
+ * @param  {string} html HTML data
+ * @return {[type]}      [description]
+ */
+function getMeta(html) {
+
+
+}
+
+// Gets Data from a RSS or XML Feed
+function getFeed(feed) {
+
+  var req = request(feed, {timeout: 10000, pool: false});
+  var i = 1;
+
+  req.setMaxListeners(50);
+  req.setHeader('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36');
+  req.setHeader('accept', 'text/html,application/xhtml+xml');
+
+  var feedparser = new FeedParser();
+
+  req.on('error', function(error) {
+    console.log(error);
+  });
+
+  req.on('response', function(res) {
+    var stream = this;
+    if (res.statusCode !== 200) {
+      this.emit('error', new Error('Bad status code'));
+    } else {
+      stream.pipe(feedparser);
+    }
+  });
+
+  feedparser.on('error', function(error) {
+    console.log(error);
+  });
+
+  feedparser.on('readable', function() {
+    var stream = this;
+    var meta = this.meta;
+    var item;
+
+    while (item = stream.read()) {
+      console.log(i + '. ' + chalk.white.bgRed(item.title));
+      console.log(moment(item.pubDate).format('DD.MM.YYYY HH:mm Z') + ' - ' + item.author);
+      console.log(item.description);
+      console.log(item.link + '\n\n');
+      i++;
+    }
+  });
+}
 
 app
   .version('0.0.1')
@@ -36,12 +96,13 @@ app
   });
 
 app
-  .command('pull [id]')
+  .command('pull [feed]')
   .description('Pulls all new entries from every feed in the queue')
-  .action(function(id) {
-    var id = id || "all";
-    console.log('Searching for new data in %s feeds...', id);
+  .action(function(feed) {
+    var feed = feed || "http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml";
+    getFeed(feed);
   });
 
 
 app.parse(process.argv);
+if (app.args.length === 0) app.help();
