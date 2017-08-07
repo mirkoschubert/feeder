@@ -1,25 +1,19 @@
 #!/usr/bin/env node --harmony
 'use strict';
 
-var request = require('request');
-var fse = require('fs-extra');
-var FeedParser = require('feedparser');
-var cheerio = require('cheerio');
-var chalk = require('chalk');
-var moment = require('moment');
-var app = require('commander');
+var request = require('request'),
+    MetaStream = require('./lib/metastream'),
+    fse = require('fs-extra'),
+    FeedParser = require('feedparser'),
+    chalk = require('chalk'),
+    moment = require('moment'),
+    app = require('commander');
 
 /**
- * Gets Meta Data from a plain HTML site
- * @param  {string} html HTML data
- * @return {[type]}      [description]
+ * Gets Data from a RSS or XML Feed
+ * @param  {string} feed XML data
+ * @return {none}
  */
-function getMeta(html) {
-
-
-}
-
-// Gets Data from a RSS or XML Feed
 function getFeed(feed) {
 
   var req = request(feed, {timeout: 10000, pool: false});
@@ -93,6 +87,26 @@ app
   .description('Lists all feeds from the queue')
   .action(function() {
     console.log(chalk.white.bgRed('There are X feeds in the queue.'));
+  });
+
+app
+  .command('meta [url]')
+  .description('Gets Meta data from url')
+  .action(function(url) {
+
+    var meta = new MetaStream({
+      url: url
+    });
+
+    meta.on('error', function(err) {
+      console.log(err);
+    });
+
+    meta.on('loaded', function(res) {
+      console.log(res);
+    });
+
+    meta.getMeta();
   });
 
 app
