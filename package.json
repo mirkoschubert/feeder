@@ -31,8 +31,10 @@
     "events": "^1.1.1",
     "feedparser": "^2.2.1",
     "fs-extra": "^4.0.1",
+    "inquirer": "^3.2.1",
     "moment": "^2.18.1",
     "request": "^2.81.0",
+    "rss-finder": "^2.0.4",
     "util": "^0.10.3"
   }
 }

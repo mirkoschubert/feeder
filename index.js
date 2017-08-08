@@ -4,9 +4,11 @@
 var request = require('request'),
     MetaStream = require('./lib/metastream'),
     fse = require('fs-extra'),
+    RssFinder = require('rss-finder'),
     FeedParser = require('feedparser'),
     chalk = require('chalk'),
     moment = require('moment'),
+    inquirer = require('inquirer'),
     app = require('commander');
 
 /**
@@ -14,9 +16,9 @@ var request = require('request'),
  * @param  {string} feed XML data
  * @return {none}
  */
-function getFeed(feed) {
+function getFeed(url) {
 
-  var req = request(feed, {timeout: 10000, pool: false});
+  var req = request(url, {timeout: 10000, pool: false});
   var i = 1;
 
   req.setMaxListeners(50);
@@ -25,8 +27,8 @@ function getFeed(feed) {
 
   var feedparser = new FeedParser();
 
-  req.on('error', function(error) {
-    console.log(error);
+  req.on('error', function(err) {
+    console.log(err);
   });
 
   req.on('response', function(res) {
@@ -38,8 +40,25 @@ function getFeed(feed) {
     }
   });
 
-  feedparser.on('error', function(error) {
-    console.log(error);
+  feedparser.on('error', function(err) {
+    RssFinder(url)
+      .then(function(res) {
+        var questions = {
+          type: 'list',
+          name: 'feed',
+          message: 'Which Feed do you want to pull?',
+          choices: []
+        }
+        res.feedUrls.forEach(function(e) {
+          questions.choices.push(e.url);
+        });
+        inquirer.prompt(questions).then(function(res) {
+          getFeed(res.feed);
+        });
+      })
+      .catch(function(err) {
+        console.error(err);
+      });
   });
 
   feedparser.on('readable', function() {
