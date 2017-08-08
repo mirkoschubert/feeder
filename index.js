@@ -3,78 +3,9 @@
 
 var request = require('request'),
     MetaStream = require('./lib/metastream'),
+    FeedStream = require('./lib/feedstream'),
     fse = require('fs-extra'),
-    RssFinder = require('rss-finder'),
-    FeedParser = require('feedparser'),
-    chalk = require('chalk'),
-    moment = require('moment'),
-    inquirer = require('inquirer'),
     app = require('commander');
-
-/**
- * Gets Data from a RSS or XML Feed
- * @param  {string} feed XML data
- * @return {none}
- */
-function getFeed(url) {
-
-  var req = request(url, {timeout: 10000, pool: false});
-  var i = 1;
-
-  req.setMaxListeners(50);
-  req.setHeader('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36');
-  req.setHeader('accept', 'text/html,application/xhtml+xml');
-
-  var feedparser = new FeedParser();
-
-  req.on('error', function(err) {
-    console.log(err);
-  });
-
-  req.on('response', function(res) {
-    var stream = this;
-    if (res.statusCode !== 200) {
-      this.emit('error', new Error('Bad status code'));
-    } else {
-      stream.pipe(feedparser);
-    }
-  });
-
-  feedparser.on('error', function(err) {
-    RssFinder(url)
-      .then(function(res) {
-        var questions = {
-          type: 'list',
-          name: 'feed',
-          message: 'Which Feed do you want to pull?',
-          choices: []
-        }
-        res.feedUrls.forEach(function(e) {
-          questions.choices.push(e.url);
-        });
-        inquirer.prompt(questions).then(function(res) {
-          getFeed(res.feed);
-        });
-      })
-      .catch(function(err) {
-        console.error(err);
-      });
-  });
-
-  feedparser.on('readable', function() {
-    var stream = this;
-    var meta = this.meta;
-    var item;
-
-    while (item = stream.read()) {
-      console.log(i + '. ' + chalk.white.bgRed(item.title));
-      console.log(moment(item.pubDate).format('DD.MM.YYYY HH:mm Z') + ' - ' + item.author);
-      console.log(item.description);
-      console.log(item.link + '\n\n');
-      i++;
-    }
-  });
-}
 
 app
   .version('0.0.1')
@@ -122,7 +53,8 @@ app
     });
 
     meta.on('loaded', function(res) {
-      console.log(res);
+      console.log('Title: ' + res['og:title'] || res.title);
+      console.log('Description: ' + res['og:description'] || res.description);
     });
 
     meta.getMeta();
@@ -131,9 +63,19 @@ app
 app
   .command('pull [feed]')
   .description('Pulls all new entries from every feed in the queue')
-  .action(function(feed) {
-    var feed = feed || "http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml";
-    getFeed(feed);
+  .option('-c, --count <n>', 'Number of entries pulled from the feed', parseInt)
+  .action(function(url) {
+    var feed = new FeedStream();
+
+    feed.on('error', function(err) {
+      console.error(err);
+    })
+
+    feed.on('loaded', function(res) {
+      console.log(res);
+    });
+
+    feed.getFeed({ url: url, count: this.count });
   });
 
 
