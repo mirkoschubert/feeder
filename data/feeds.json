@@ -1,0 +1,28 @@
+{
+  "feeds": [
+    {
+      "name": "Achtsame Lebenskunst",
+      "url": "https://achtsame-lebenskunst.de/feed/"
+    },
+    {
+      "name": "Afschin",
+      "url": "http://www.afschin.com/rss/"
+    },
+    {
+      "name": "Alex Rubenbauer",
+      "url": "https://alex-rubenbauer.de/rss/"
+    },
+    {
+      "name": "alfa ZENtauri",
+      "url": "http://feeds.feedburner.com/alfazentauri"
+    },
+    {
+      "name": "Babs ist Grün",
+      "url": "http://babettgruen.de/feed/"
+    },
+    {
+      "name": "Denis Sandmann",
+      "url": "https://sandmann.co/de/feed/"
+    }
+  ]
+}

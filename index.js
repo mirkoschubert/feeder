@@ -2,6 +2,7 @@
 'use strict';
 
 var request = require('request'),
+    Feeds = require('./lib/feeds'),
     MetaStream = require('./lib/metastream'),
     FeedStream = require('./lib/feedstream'),
     fse = require('fs-extra'),
@@ -23,20 +24,25 @@ app
   });
 
 app
-  .command('add <url>')
+  .command('add [url]')
   .description('Adds a new Feed URL to the queue')
   .option('-f, --format <format>', 'Sets the format of the url (Default: xml)')
   .action(function(url, options) {
-    var url = url;
-    var format = options.format || "xml";
-    console.log('The URL %s with a %s format has been added.', url, format);
+    var feeds = new Feeds('./data/feeds.json');
+
+    feeds.addFeed(url);
+    feeds.on('saved', function(url) {
+      console.log('\nThe URL %s  has been added.\n', url);
+    });
   });
 
 app
   .command('list')
   .description('Lists all feeds from the queue')
   .action(function() {
-    console.log(chalk.white.bgRed('There are X feeds in the queue.'));
+    var feeds = new Feeds('./data/feeds.json');
+
+    feeds.listFeeds();
   });
 
 app
@@ -61,10 +67,10 @@ app
   });
 
 app
-  .command('pull [feed]')
+  .command('pull [url]')
   .description('Pulls all new entries from every feed in the queue')
   .option('-c, --count <n>', 'Number of entries pulled from the feed', parseInt)
-  .action(function(url) {
+  .action(function(url, options) {
     var feed = new FeedStream();
 
     feed.on('error', function(err) {
@@ -75,7 +81,7 @@ app
       console.log(res);
     });
 
-    feed.getFeed({ url: url, count: this.count });
+    feed.getFeed({ url: url, count: options.count });
   });
 
 
