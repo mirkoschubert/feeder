@@ -2,27 +2,32 @@
   "feeds": [
     {
       "name": "Achtsame Lebenskunst",
-      "url": "https://achtsame-lebenskunst.de/feed/"
+      "url": "https://achtsame-lebenskunst.de/feed/",
+      "description": "Achtsamkeit- und Minimaismus-Blog, Anregungen, Infos, Tipps und Beiträge zu Achtsamkeit, Minimalismus und einen einfachen Lebensstil."
     },
     {
       "name": "Afschin",
-      "url": "http://www.afschin.com/rss/"
+      "url": "http://www.afschin.com/rss/",
+      "description": "Es geht um gelebte und lebendige Spiritualität. Sie ist viel mehr als Mediation, Achtsamkeit und Yoga. Sie bedeutet die absolute Bereitschaft dem Leben Kompromisslos zu folgen. Zum Wohle Aller Wesen."
     },
     {
       "name": "Alex Rubenbauer",
-      "url": "https://alex-rubenbauer.de/rss/"
+      "url": "https://alex-rubenbauer.de/rss/",
+      "description": "Blog über Psychologie, Persönlichkeitsentwicklung und Minimalismus: Wie man ein einfaches und glückliches Leben führt."
     },
     {
       "name": "alfa ZENtauri",
       "url": "http://feeds.feedburner.com/alfazentauri"
     },
     {
-      "name": "Babs ist Grün",
-      "url": "http://babettgruen.de/feed/"
+      "name": "Babs ist grün",
+      "url": "http://babettgruen.de/feed/",
+      "description": "Finanzielle Freiheit für Mütter und ihre Kinder durch Investieren statt konsumieren - Babett Grün - finanzielle Freiheit mit Familie"
     },
     {
       "name": "Denis Sandmann",
-      "url": "https://sandmann.co/de/feed/"
+      "url": "https://sandmann.co/de/feed/",
+      "description": "Ich schreibe. Ich reise. Ich atme. Ich erschaffe. Ich lebe mit weniger. Ich suche nach Lösungen. Ich versuche etwas zu tun, dass Bedeutung hat."
     },
     {
       "name": "Die Entdeckung der Schlichtheit",
@@ -30,7 +35,18 @@
     },
     {
       "name": "Digitaler Minimalismus",
-      "url": "https://digitaler-minimalismus.de/feed"
+      "url": "https://digitaler-minimalismus.de/feed",
+      "description": "Reduziere Dein digitales Leben auf das Wesentliche!"
+    },
+    {
+      "name": "Einfach bewusst",
+      "url": "http://www.einfachbewusst.de/feed/",
+      "description": "einfachbewusst.de - Minimalismus und Nachhaltigkeit im Alltag und auf Reisen"
+    },
+    {
+      "name": "Einfach einfach leben",
+      "url": "http://einfacheinfachleben.blogspot.com/feeds/posts/default",
+      "description": "Blog \"einfach leben\": Berlin, Fotos, Tipps, DIY, Minimalismus, Entrümpeln, Ordnung, Haushalt, Ernährung, Nähen, Körperpflege & Medientipps"
     }
   ]
 }

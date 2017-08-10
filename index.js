@@ -1,12 +1,12 @@
 #!/usr/bin/env node --harmony
 'use strict';
 
-var request = require('request'),
-    Feeds = require('./lib/feeds'),
-    MetaStream = require('./lib/metastream'),
-    FeedStream = require('./lib/feedstream'),
-    fse = require('fs-extra'),
-    app = require('commander');
+const request = require('request'),
+      Feeds = require(__dirname + '/lib/feeds'),
+      Metas = require(__dirname + '/lib/metas'),
+      FeedStream = require('./lib/feedstream'),
+      fse = require('fs-extra'),
+      app = require('commander');
 
 app
   .version('0.0.1')
@@ -25,6 +25,7 @@ app
 
 app
   .command('add [url]')
+  .alias('a')
   .description('Adds a new Feed URL to the queue')
   .option('-f, --format <format>', 'Sets the format of the url (Default: xml)')
   .action(function(url, options) {
@@ -38,6 +39,7 @@ app
 
 app
   .command('list')
+  .alias('l')
   .description('Lists all feeds from the queue')
   .action(function() {
     var feeds = new Feeds(__dirname + '/data/feeds.json');
@@ -46,11 +48,24 @@ app
   });
 
 app
+  .command('check [url]')
+  .alias('c')
+  .description('Shows the checking process')
+  .action(function(url) {
+    var feeds = new Feeds(__dirname + '/data/feeds.json');
+
+    feeds.checkData(url);
+    feeds.on('checked', function(data) {
+      console.log(data);
+    });
+  });
+
+app
   .command('meta [url]')
   .description('Gets Meta data from url')
   .action(function(url) {
 
-    var meta = new MetaStream({
+    var meta = new Metas({
       url: url
     });
 
