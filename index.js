@@ -28,7 +28,7 @@ app
   .description('Adds a new Feed URL to the queue')
   .option('-f, --format <format>', 'Sets the format of the url (Default: xml)')
   .action(function(url, options) {
-    var feeds = new Feeds('./data/feeds.json');
+    var feeds = new Feeds(__dirname + '/data/feeds.json');
 
     feeds.addFeed(url);
     feeds.on('saved', function(url) {
@@ -40,7 +40,7 @@ app
   .command('list')
   .description('Lists all feeds from the queue')
   .action(function() {
-    var feeds = new Feeds('./data/feeds.json');
+    var feeds = new Feeds(__dirname + '/data/feeds.json');
 
     feeds.listFeeds();
   });
