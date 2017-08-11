@@ -15,11 +15,9 @@ app
 
 app
   .command('init [name]')
-  .description('Initializes the Feeder')
-  .option('-f, --format <format>', '' )
-  .action(function(name, options) {
-    var name = name || "default";
-    var format = options.format || "json";
+  .description('Initializes the Feeder outside of the package')
+  .action(function(name) {
+    var name = name || "feeder";
     console.log('The feeder with the name \»%s\« is initialized in the %s format.', name, format);
   });
 
@@ -48,16 +46,14 @@ app
   });
 
 app
-  .command('check [url]')
+  .command('check')
   .alias('c')
-  .description('Shows the checking process')
-  .action(function(url) {
-    var feeds = new Feeds(__dirname + '/data/feeds.json');
-
-    feeds.checkData(url);
-    feeds.on('checked', function(data) {
-      console.log(data);
-    });
+  .option('-V, --verbose', 'Asks for deletions for every broken entry')
+  .description('Checks for broken feed urls and deletes them')
+  .action(function(options) {
+    var feeds = new Feeds();
+    console.log('\nChecking feeds for broken urls...\n');
+    feeds.checkLinks(options);
   });
 
 app

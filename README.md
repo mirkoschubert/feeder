@@ -4,7 +4,7 @@
 
 ## Installation
 
-Since Feeder is written for node.js installing is pretty easy. Fork or download the code and switch to the main folder, then just type the following command in your shell:
+Since Feeder is written for node.js installing is pretty easy. Fork or download the code and switch to the working folder, then just type the following command in your shell:
 
 ```
 npm install --global
@@ -35,7 +35,7 @@ feeder list
 
 It will display the name and url of each feed as well as a short description, which has been parsed from the `og:dscription` or `description` meta data of the home page.
 
-### Roadmap
+## Roadmap
 
 - [x] Add Feed to the queue
 - [x] List the whole queue
