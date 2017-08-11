@@ -1,0 +1,7 @@
+# Hide all data files
+data/feeds.json
+data/feeds/*.json
+data/exports/*.json
+
+# Dependency directories
+node_modules
