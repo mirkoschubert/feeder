@@ -1,12 +1,13 @@
 #!/usr/bin/env node --harmony
 'use strict';
 
-const request = require('request'),
+const Promise = require('promise'),
+      request = require('request'),
       Feeds = require(__dirname + '/lib/feeds'),
       Metas = require(__dirname + '/lib/metas'),
-      MetaPromise = require(__dirname + '/lib/metaspromise'),
-      FeedStream = require('./lib/feedstream'),
       fse = require('fs-extra'),
+      chalk = require('chalk'),
+      moment = require('moment'),
       app = require('commander');
 
 app
@@ -62,7 +63,7 @@ app
   .description('Updates all Feeds')
   .action(function() {
     var feeds = new Feeds();
-
+    console.log('\nUpdating all feeds...\n');
     feeds.updateFeeds();
   });
 
@@ -74,57 +75,31 @@ app
     var feeds = new Feeds();
     feeds.loadFeed(url, options.count);
     feeds.on('articles', function(res) {
-      console.log(res);
+      for (var i = 0; i < res.length; i++) {
+        console.log((i + 1) + '. ' + chalk.white.bgRed(res[i].title));
+        console.log('   ' + moment(res[i].pubDate).format('DD.MM.YYYY HH:mm Z') + ' - ' + res[i].author);
+        console.log('   ' + chalk.dim(res[i].description));
+        console.log('   ' + res[i].url + '\n');
+      }
     });
-  });
-
-app
-  .command('metatest [url]')
-  .description('TEST Metapromises')
-  .action(function(url) {
-    MetaPromise(url, ['description', 'og:description'])
-      .then(function(res) {
-        console.log(res);
-      });
   });
 
 app
   .command('meta [url]')
   .description('Gets Meta data from url')
   .action(function(url) {
-
-    var meta = new Metas();
-
-    meta.on('error', function(err) {
-      console.log(err.message);
-    });
-
-    meta.on('loaded', function(res) {
-      console.log('Title: ' + res['og:title'] || res.title);
-      console.log('Description: ' + res['og:description'] || res.description);
-    });
-
-    meta.getMeta(url);
+    MetaPromise(url)
+      .then(function(res) {
+        console.log('\n');
+        for (var k in res) {
+          console.log('[%s]  %s', chalk.red(k), res[k]);
+        }
+        console.log('\n');
+      })
+      .catch(function(err) {
+        console.error(err.message);
+      })
   });
-
-app
-  .command('pull [url]')
-  .description('Pulls all new entries from every feed in the queue')
-  .option('-c, --count <n>', 'Number of entries pulled from the feed', parseInt)
-  .action(function(url, options) {
-    var feed = new FeedStream();
-
-    feed.on('error', function(err) {
-      console.error(err);
-    })
-
-    feed.on('loaded', function(res) {
-      console.log(res);
-    });
-
-    feed.getFeed({ url: url, count: options.count });
-  });
-
 
 app.parse(process.argv);
 if (app.args.length === 0) app.help();
