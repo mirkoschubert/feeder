@@ -35,8 +35,11 @@
     "inquirer": "^3.2.1",
     "jsonfile": "^3.0.1",
     "moment": "^2.18.1",
+    "progress": "^2.0.0",
+    "promise": "^8.0.1",
     "request": "^2.81.0",
     "rss-finder": "^2.0.4",
+    "stream-progressbar": "^1.0.2",
     "util": "^0.10.3"
   }
 }

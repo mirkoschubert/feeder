@@ -4,6 +4,7 @@
 const request = require('request'),
       Feeds = require(__dirname + '/lib/feeds'),
       Metas = require(__dirname + '/lib/metas'),
+      MetaPromise = require(__dirname + '/lib/metaspromise'),
       FeedStream = require('./lib/feedstream'),
       fse = require('fs-extra'),
       app = require('commander');
@@ -57,16 +58,45 @@ app
   });
 
 app
+  .command('update')
+  .description('Updates all Feeds')
+  .action(function() {
+    var feeds = new Feeds();
+
+    feeds.updateFeeds();
+  });
+
+app
+  .command('load [url]')
+  .description('TEST: Load and parse a Feed url')
+  .option('-c, --count <n>', 'Number of entries pulled from the feed', parseInt)
+  .action(function(url, options) {
+    var feeds = new Feeds();
+    feeds.loadFeed(url, options.count);
+    feeds.on('articles', function(res) {
+      console.log(res);
+    });
+  });
+
+app
+  .command('metatest [url]')
+  .description('TEST Metapromises')
+  .action(function(url) {
+    MetaPromise(url, ['description', 'og:description'])
+      .then(function(res) {
+        console.log(res);
+      });
+  });
+
+app
   .command('meta [url]')
   .description('Gets Meta data from url')
   .action(function(url) {
 
-    var meta = new Metas({
-      url: url
-    });
+    var meta = new Metas();
 
     meta.on('error', function(err) {
-      console.log(err);
+      console.log(err.message);
     });
 
     meta.on('loaded', function(res) {
@@ -74,7 +104,7 @@ app
       console.log('Description: ' + res['og:description'] || res.description);
     });
 
-    meta.getMeta();
+    meta.getMeta(url);
   });
 
 app
