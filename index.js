@@ -31,9 +31,13 @@ app
 app
   .command('list')
   .alias('l')
+  .option('-t, --title', 'Shows the title of the feed')
+  .option('-u, --url', 'Shows the url of the feed')
+  .option('-s, --status', 'Shows the status code of the feed')
+  .option('-c, --count <n>', 'Shows only the first n entries of the feed', parseInt)
   .description('Lists all feeds from the queue')
-  .action(function() {
-    feedlist.list();
+  .action(function(options) {
+    feedlist.list(options);
   });
 
 app
