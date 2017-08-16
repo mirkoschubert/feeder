@@ -39,7 +39,9 @@ It will display the name and url of each feed as well as a short description, wh
 
 - [x] Add Feed to the queue
 - [x] List the whole queue
-- [ ] Check for broken feed links and remove them from the feed
+- [x] Check for broken feed links
+- [x] Remove broken feed links
+- [x] Retrieve any new data from a feed url
 - [ ] Retrieve and save any new data from all feeds of the queue
 - [ ] Read new feed entries in plain text
 - [ ] Save any article as text, markdown or html
