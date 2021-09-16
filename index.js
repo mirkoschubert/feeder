@@ -2,11 +2,8 @@
 'use strict';
 
 const Promise = require('promise'),
-      request = require('request'),
       FeedList = require(__dirname + '/lib/feedlist'),
       Feeds = require(__dirname + '/lib/feeds'),
-      Metas = require(__dirname + '/lib/metas'),
-      fse = require('fs-extra'),
       chalk = require('chalk'),
       moment = require('moment'),
       app = require('commander');
@@ -23,7 +20,8 @@ app
 app
   .command('init [name]')
   .description('Initializes the Feeder outside of the package')
-  .action(function(name) {
+  .option('-f, --format', 'Sets the format of the feeder')
+  .action(function(name, format) {
     var name = name || "feeder";
     console.log('The feeder with the name "%s" is initialized in the %s format.', name, format);
   });
@@ -61,7 +59,6 @@ app
   .option('-V, --verbose', 'Asks for deletions for every broken entry')
   .description('Checks for broken feed urls and deletes them')
   .action(function(options) {
-    var feeds = new Feeds();
     console.log('\nChecking feeds for broken urls...\n');
     feedlist.checkLinks(options);
   });
@@ -98,7 +95,7 @@ app
   .command('meta [url]')
   .description('Gets Meta data from url')
   .action(function(url) {
-    MetaPromise(url)
+/*     Meta(url)
       .then(function(res) {
         console.log('\n');
         for (var k in res) {
@@ -109,7 +106,7 @@ app
       .catch(function(err) {
         console.error(err.message);
       })
-  });
+ */  });
 
 app.parse(process.argv);
 if (app.args.length === 0) app.help();
